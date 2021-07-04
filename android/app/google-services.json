@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "970906412466",
+    "project_id": "atg-task1",
+    "storage_bucket": "atg-task1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970906412466:android:39e2c734f10749440e70ab",
+        "android_client_info": {
+          "package_name": "com.example.notekeeperatg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970906412466-0bnjaevd8umdjnojrv8irrbgv7n8u2n9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.notekeeperatg",
+            "certificate_hash": "3ac68a6c25402bc78da35050253343f05ea240c0"
+          }
+        },
+        {
+          "client_id": "970906412466-443qk2mu9v38t9e2q0ha5vdf859612ke.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa5-AInC3Q5yqdk0Jy43dBv9kXrauCCRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970906412466-443qk2mu9v38t9e2q0ha5vdf859612ke.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
