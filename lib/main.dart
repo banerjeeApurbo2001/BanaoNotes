@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notekeeperatg/ui/pages/add_note.dart';
+import 'package:notekeeperatg/ui/pages/note_details.dart';
 import 'package:notekeeperatg/ui/pages/notes_home.dart';
 import 'package:notekeeperatg/ui/pages/splash.dart';
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         home: Splash(),
         routes: {
           "add_note": (_) => AddNotePage(),
+          "note_view": (_) => NoteDetailsPage(),
         },
     );
   }
