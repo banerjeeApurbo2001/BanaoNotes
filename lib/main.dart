@@ -1,4 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notekeeperatg/repository/FirebaseRepository.dart';
 import 'package:notekeeperatg/ui/pages/add_note.dart';
 import 'package:notekeeperatg/ui/pages/note_details.dart';
 import 'package:notekeeperatg/ui/pages/notes_home.dart';
@@ -6,9 +9,20 @@ import 'package:notekeeperatg/ui/pages/splash.dart';
 
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'blocs/bottom_navigationbar_tabs.dart';
+import 'blocs/firestore.dart';
+import 'data_provider/FirebaseService.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+
+  FirebaseRepository repository = FirebaseRepository(service: FirebaseService(init: "Hello"));
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -35,11 +49,14 @@ class MyApp extends StatelessWidget {
                 color: Colors.grey.shade600,
               )),
         ),
-        home: Splash(),
-        routes: {
-          "add_note": (_) => AddNotePage(),
-          "note_view": (_) => NoteDetailsPage(),
-        },
+        home: BlocProvider(
+            create: (context)=>NavigationCubit(),
+            child: BlocProvider(
+              create: (context)=>Data(repository: repository),
+              child: NotesHomPage(),
+            )
+        )
+
     );
   }
 }

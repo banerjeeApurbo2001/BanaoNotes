@@ -1,74 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notekeeperatg/blocs/delete_data.dart';
+import 'package:notekeeperatg/blocs/firestore.dart';
+import 'package:notekeeperatg/data_provider/FirebaseService.dart';
 import 'package:notekeeperatg/pojo_model/Note.dart';
+import 'package:notekeeperatg/repository/FirebaseRepository.dart';
+import 'package:notekeeperatg/ui/widgets/note_item.dart';
 
-
-class NoteDetailsPage extends StatefulWidget {
-  final Note note;
-
-
-  const NoteDetailsPage({Key key, @required this.note}) : super(key: key);
-
-  @override
-  _NoteDetailsPageState createState() => _NoteDetailsPageState();
-}
-
-class _NoteDetailsPageState extends State<NoteDetailsPage> {
-  var _processing;
-
-  var _titleController;
-
-  var _editMode;
-
-  var _descriptionController;
+class NoteDetailsPage extends StatelessWidget {
+  Note note;
+  NoteDetailsPage({Key key, @required this.note}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Note Details'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              widget.note.title,
-            ),
-            const SizedBox(height: 10.0),
-            Text(
-              widget.note.description,
-            ),
-            FloatingActionButton(
+    return BlocProvider(
+      create: (context) => Delete(repository: FirebaseRepository(service: FirebaseService(init: "ViewNote"))),
+      child: BlocBuilder<Delete, DeleteDataFirestoreState>(
+        builder: (context, state) {
+          if(state is DeleteDataFirestoreInitial)
+            return Scaffold(
+              appBar: AppBar(title: Text(note.title??"XD"),),
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(note.description??'This is Apurba Here', style: TextStyle(fontSize: 30.0),),
+                ),
+              ),
+              floatingActionButton: (!note.deleted)?FloatingActionButton(onPressed: () {
+                BlocProvider.of<Delete>(context).delete(note.id);
+              },
+                child: Icon(Icons.delete),
 
-                child: _processing ? CircularProgressIndicator() : Icon(Icons.check),
-                onPressed: _processing
-                    ? null
-                    : () async {
-                  setState(() {
-                    _processing = true;
-                  });
-                  if (_titleController.text.isEmpty) {
-                    _key.currentState.showSnackBar(SnackBar(
-                      content: Text("Title is required."),
-                    ));
-                    return;
-                  }
-                  Note note = Note(
-                    id: _editMode ? widget.note.id : null,
-                    title: _titleController.text,
-                    description: _descriptionController.text,
-                    createdAt: DateTime.now(),
-                  );
-                  setState(() {
-                    _processing = false;
-                  });
-                  Navigator.pop(context);
-                }
-            ),
-          ],
-        ),
+              ):Container(),
+            );
+          if(state is DeleteDataFirestoreDeleting)
+            return Center(
+              child: Text("Deleted"),
+            );
+          if(state is DeleteDataFirestoreDeleted){
+            if(state.status){
+              return Scaffold(
+                body: Center(child: Text("Deleted"),),
+                );
+            }
+            else{
+              return Scaffold(body:Center(child: Text("Deletion Aborted!!"),));
+            }
+          }
+          return Text("Delete Screen");
+        },
       ),
     );
   }
 }
+

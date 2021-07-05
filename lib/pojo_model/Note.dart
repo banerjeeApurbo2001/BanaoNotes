@@ -14,7 +14,7 @@ class Note{
    @required this.title,
    @required this.description,
    @required this.deleted,
-    @required this.createdAt,
+    this.createdAt,
  });
 
   Note.fromJSON(Map json) :

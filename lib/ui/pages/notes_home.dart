@@ -1,76 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notekeeperatg/blocs/bottom_navigationbar_tabs.dart';
+import 'package:notekeeperatg/ui/pages/note_details.dart';
 import 'package:provider/provider.dart';
 
-class NotesHomPage extends StatefulWidget {
-  @override
-  _NotesHomPageState createState() => _NotesHomPageState();
-}
+import 'add_note.dart';
+import 'deleted_notes.dart';
+import 'notes.dart';
 
-class _NotesHomPageState extends State<NotesHomPage> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
+class NotesHomPage extends StatelessWidget {
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
-      appBar: AppBar(
-        title: Text("Banao Notes"),
+      appBar: AppBar(title: Text("Banao Notes"),),
+      body: BlocBuilder<NavigationCubit,NavigationState>(
+          builder:(_,state){
+            if(state is NavigationInitial){
+              return NoteList();
+            }
+            if(state is NavigationNavigate){
+              var index = state.navigationIndex;
+              if(index==0){
+                return NoteList();
+              } else if(index==1){
+                return TrashScreen();
+              }
+            }
+            return Text("Not Null");
+          }
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color.fromRGBO(219, 84, 84, 1),
-        notchMargin: 8.0,
-        shape: AutomaticNotchedShape(
-          RoundedRectangleBorder(),
-          StadiumBorder(
-            side: BorderSide(),
-          ),
-        ),
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('My Notes'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.delete),
-              title: Text('Bin'),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        //backgroundColor: Colors.indigo,
-        onPressed: () => Navigator.pushNamed(context, "add_note"),
-      ),
-//      floatingActionButton: FloatingActionButton(
-//        child: Icon(Icons.add),
-//        onPressed: () => Navigator.pushNamed(context, "add_note"),
-//      ),
+      bottomNavigationBar: _navbar(context),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: _fab(context),
     );
   }
-
-
 }
+
+Widget _navbar(context) {
+
+  return BlocBuilder<NavigationCubit,NavigationState>(
+      builder:(_,state){
+        var idx = (state is NavigationInitial)?(state).navigationIndex:(state as NavigationNavigate).navigationIndex;
+
+        return BottomNavigationBar(items: [
+          BottomNavigationBarItem(icon: Icon(Icons.note),title: Text("My Notes"),activeIcon: Icon(Icons.note)),
+          BottomNavigationBarItem(icon: Icon(Icons.delete_outline,),title: Text("Bin"),activeIcon: Icon(Icons.delete)),
+        ],
+          currentIndex: idx,
+          onTap:(index){
+            BlocProvider.of<NavigationCubit>(context).setNavigation(index);
+          },
+        );
+      }
+  );
+}
+
+
+Widget _fab(context) {
+  return FloatingActionButton(onPressed: (){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddNotePage())).then((value) => (context as Element).markNeedsBuild());
+  },child: Icon(Icons.add),);
+}
+

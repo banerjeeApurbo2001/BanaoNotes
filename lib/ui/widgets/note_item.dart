@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:notekeeperatg/pojo_model/Note.dart';
+import 'package:notekeeperatg/ui/pages/note_details.dart';
 import 'package:notekeeperatg/ui/widgets/dialog._box.dart';
 
 class NoteItem extends StatelessWidget {
-  final Note note;
-  final Function(Note) onEdit;
-  final Function(Note) onDelete;
-  final Function(Note) onTap;
+  Note note;
 
-  const NoteItem({
+  NoteItem({
     Key key,
     @required this.note,
-    @required this.onEdit,
-    @required this.onDelete,
-    @required this.onTap,
   }) : super(key: key);
 
   @override
@@ -22,12 +17,19 @@ class NoteItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(color: Colors.white),
       child: Card(
+        shadowColor: Colors.black,
         child: InkWell(
-          splashColor: Colors.indigoAccent,
+          splashColor: Colors.black,
+          hoverColor: Colors.blue,
           child: ListTile(
-            title: Text(note.title),
-            subtitle: Text(note.description,overflow: TextOverflow.ellipsis, maxLines: 2),
+            title: Text(note.title??'LOL'),
+            subtitle: Text(note.description??'Hello this is Apurba here',overflow: TextOverflow.ellipsis, maxLines: 2),
             onLongPress: (){},
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context)=>NoteDetailsPage(
+                    note: note,))).then((value) => (context as Element).markNeedsBuild());
+            },
           ),
         ),
       ),
