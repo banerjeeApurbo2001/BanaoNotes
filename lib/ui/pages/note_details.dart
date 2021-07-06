@@ -17,13 +17,21 @@ class NoteDetailsPage extends StatelessWidget {
       create: (context) => Delete(repository: FirebaseRepository(service: FirebaseService(init: "ViewNote"))),
       child: BlocBuilder<Delete, DeleteDataFirestoreState>(
         builder: (context, state) {
-          if(state is DeleteDataFirestoreInitial)
+          if(state is DeleteDataFirestoreInitial) {
             return Scaffold(
               appBar: AppBar(title: Text(note.title??""),),
               body: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    //Text(note.createdAt.toDate().toString()),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,15,16,20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text("Last Updated @ ${note.createdAt.toDate().toString()}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12,color: Colors.blueGrey),),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16,25,16,25),
                       child: Text(note.description??'', style: TextStyle(fontSize: 20.0),),
@@ -38,6 +46,7 @@ class NoteDetailsPage extends StatelessWidget {
 
               ):Container(),
             );
+          }
           if(state is DeleteDataFirestoreDeleting)
             return Scaffold(
               appBar: AppBar(

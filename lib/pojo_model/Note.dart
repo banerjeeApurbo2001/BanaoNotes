@@ -8,7 +8,7 @@ class Note{
   String title;
   var description;
   bool deleted;
-
+  Timestamp createdAt = Timestamp.now();
 
   Note({
    @required this.id,
