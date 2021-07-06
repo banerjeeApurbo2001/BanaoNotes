@@ -49,9 +49,7 @@ class AddNotePage extends StatelessWidget {
               if(state is AddDataFirestoreAdded){
                 // return Center(child: Text(state.status.toString()));
                 if(state.status)
-                  return Center(child: RaisedButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  },child: Text("Note Added Successfully"),),);
+                  return Center(child: Text("Note Added Successfully"),);
                 else
                   return Center(child: Text("Something went Wrong"),);
               }
@@ -68,6 +66,11 @@ class AddNotePage extends StatelessWidget {
       decoration: InputDecoration(border: OutlineInputBorder(),labelText: "Note"),
       keyboardType: TextInputType.multiline,
       maxLines: 10,
+      validator: (value){
+        if(value == null || value.trim().isEmpty)
+          return "Note field is mandatory";
+        return null;
+      },
 
     );
   }

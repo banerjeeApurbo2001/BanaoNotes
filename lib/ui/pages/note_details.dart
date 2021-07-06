@@ -19,11 +19,16 @@ class NoteDetailsPage extends StatelessWidget {
         builder: (context, state) {
           if(state is DeleteDataFirestoreInitial)
             return Scaffold(
-              appBar: AppBar(title: Text(note.title??"XD"),),
+              appBar: AppBar(title: Text(note.title??""),),
               body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(note.description??'This is Apurba Here', style: TextStyle(fontSize: 30.0),),
+                child: Column(
+                  children: <Widget>[
+                    //Text(note.createdAt.toDate().toString()),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16,25,16,25),
+                      child: Text(note.description??'', style: TextStyle(fontSize: 20.0),),
+                    ),
+                  ],
                 ),
               ),
               floatingActionButton: (!note.deleted)?FloatingActionButton(onPressed: () {
@@ -34,12 +39,17 @@ class NoteDetailsPage extends StatelessWidget {
               ):Container(),
             );
           if(state is DeleteDataFirestoreDeleting)
-            return Center(
-              child: Text("Deleted"),
+            return Scaffold(
+              appBar: AppBar(
+              ),
+              body: Center(
+                child: Text("Deleted"),
+              ),
             );
           if(state is DeleteDataFirestoreDeleted){
             if(state.status){
               return Scaffold(
+                appBar: AppBar(),
                 body: Center(child: Text("Deleted"),),
                 );
             }

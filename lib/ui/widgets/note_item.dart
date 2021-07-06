@@ -22,8 +22,8 @@ class NoteItem extends StatelessWidget {
           splashColor: Colors.black,
           hoverColor: Colors.blue,
           child: ListTile(
-            title: Text(note.title??'LOL'),
-            subtitle: Text(note.description??'Hello this is Apurba here',overflow: TextOverflow.ellipsis, maxLines: 2),
+            title: Text(note.title??''),
+            subtitle: Text(note.description??'',overflow: TextOverflow.ellipsis, maxLines: 2),
             onLongPress: (){},
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(

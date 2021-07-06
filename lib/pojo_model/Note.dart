@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 /// POJO for our note
@@ -5,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 class Note{
   String id;
   String title;
-  String description;
+  var description;
   bool deleted;
-  DateTime createdAt;
+
 
   Note({
    @required this.id,
@@ -20,7 +21,6 @@ class Note{
   Note.fromJSON(Map json) :
         id=json["id"],
         title=json["title"],
-        description=json["description"],
-        deleted=json["deleted"],
-        createdAt=json["createdAt"];
+        description=json["note"],
+        deleted=json["deleted"];
 }
