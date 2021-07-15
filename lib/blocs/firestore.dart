@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
+import 'package:notekeeperatg/data_provider/DatabaseService.dart';
+import 'package:notekeeperatg/data_provider/InternetService.dart';
 import 'package:notekeeperatg/pojo_model/Note.dart';
 import 'package:notekeeperatg/repository/FirebaseRepository.dart';
 
@@ -10,12 +12,26 @@ class Data extends Cubit<FirestoreDataState> {
 
   void fetchNotDeletedCollections() {
     emit(FirestoreDataLoading());
-    repository.fetchNotDeletedCollections().then((notes)=>emit(FirestoreDataLoaded(notes)));
+    InternetService().checkConnected().then((value)=>{
+      if(value)
+        repository.fetchNotDeletedCollections().then((notes)=>emit(FirestoreDataLoaded(notes)))
+      else{
+        print("finding cache"),
+        DatabaseService.instance.fetchNotDeleted().then((value) => emit(FirestoreDataLoaded(value)))
+      }
+    });
   }
 
   void fetchDeletedCollections() {
     emit(FirestoreDeletedDataLoading());
-    repository.fetchDeletedCollections().then((notes) => emit(FirestoreDataDeletedLoaded(notes)));
+    InternetService().checkConnected().then((value)=>{
+      if(value)
+        repository.fetchDeletedCollections().then((notes) => emit(FirestoreDataDeletedLoaded(notes)))
+      else{
+        print("finding cache"),
+        DatabaseService.instance.fetchDeleted().then((value) => emit(FirestoreDataDeletedLoaded(value)))
+      }
+    });
   }
 }
 

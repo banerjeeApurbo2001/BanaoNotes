@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 
 class AddNotePage extends StatelessWidget {
   AddNotePage({Key key}) : super(key: key);
-  TextEditingController title=TextEditingController(),description = TextEditingController();
+  TextEditingController title=TextEditingController(),
+      description = TextEditingController(),
+      url = TextEditingController();
   FirebaseRepository repository = FirebaseRepository(service: FirebaseService(init: "Firebase"));
   // final GlobalKey<FormState> key = GlobalKey<FormState>();
 
@@ -33,6 +35,10 @@ class AddNotePage extends StatelessWidget {
                           _titleText(),
                           SizedBox(height: 10.0,),
                           _noteText(),
+                          SizedBox(height: 10.0,),
+                          _videoCheck(context,state.checkedState),
+                          SizedBox(height: 10.0,),
+                          (state.checkedState)?_urlInput(context):Text(""),
                           SizedBox(height: 10.0,),
                           _submitButton(context)
                         ],
@@ -82,10 +88,22 @@ class AddNotePage extends StatelessWidget {
     );
   }
 
+
+  Widget _urlInput(BuildContext context) {
+    return TextFormField(controller: url,decoration: InputDecoration(border: OutlineInputBorder(),labelText: "Url"),);
+  }
+
   Widget _submitButton(context) {
     return FloatingActionButton(onPressed:(){
-      BlocProvider.of<Add>(context).addData(title.text.toString(),description.text.toString());
+      BlocProvider.of<Add>(context).addData(title.text.toString(),description.text.toString(),url.text.toString());
     }, child: Icon(Icons.check), );
   }
+
+Widget _videoCheck(context,checkedState) {
+  return CheckboxListTile(value: checkedState, onChanged: (checkState){
+    BlocProvider.of<Add>(context).setCheckStateChange(checkState);
+  },title: Text("Add Video Url"),);
 }
 
+
+}

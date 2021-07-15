@@ -44,7 +44,8 @@ class FirebaseService{
     var p = await reference.add({
       'title':n.title,
       'note':n.description,
-      'deleted':n.deleted
+      'deleted':n.deleted,
+      'url':n.url,
     });
     if(p.id.length>0){
       return true;

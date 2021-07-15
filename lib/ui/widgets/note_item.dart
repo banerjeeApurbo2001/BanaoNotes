@@ -6,10 +6,8 @@ import 'package:notekeeperatg/ui/widgets/dialog._box.dart';
 class NoteItem extends StatelessWidget {
   Note note;
 
-  NoteItem({
-    Key key,
-    @required this.note,
-  }) : super(key: key);
+  final BuildContext homeContext;
+  NoteItem({Key key,@required this.note, @required this.homeContext}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +24,7 @@ class NoteItem extends StatelessWidget {
             subtitle: Text(note.description??'',overflow: TextOverflow.ellipsis, maxLines: 2),
             onLongPress: (){},
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context)=>NoteDetailsPage(
-                    note: note,))).then((value) => (context as Element).markNeedsBuild());
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteDetailsPage(note: note,))).then((value) => (homeContext as Element).markNeedsBuild());
             },
           ),
         ),

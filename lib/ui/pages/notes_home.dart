@@ -17,12 +17,12 @@ class NotesHomPage extends StatelessWidget {
       body: BlocBuilder<NavigationCubit,NavigationState>(
           builder:(_,state){
             if(state is NavigationInitial){
-              return NoteList();
+              return NoteList(homeContext: context);
             }
             if(state is NavigationNavigate){
               var index = state.navigationIndex;
               if(index==0){
-                return NoteList();
+                return NoteList(homeContext: context);
               } else if(index==1){
                 return TrashScreen();
               }

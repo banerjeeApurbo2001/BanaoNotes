@@ -4,7 +4,8 @@ import 'package:notekeeperatg/blocs/firestore.dart';
 import 'package:notekeeperatg/ui/widgets/note_item.dart';
 
 class NoteList extends StatelessWidget {
-  NoteList({Key key}) : super(key: key);
+  final BuildContext homeContext;
+  NoteList({Key key,@required this.homeContext}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class NoteList extends StatelessWidget {
           return ListView.builder(
               itemCount: state.notes.length,
               itemBuilder: (_,index){
-                return NoteItem(note: state.notes[index]);
+                return NoteItem(note: state.notes[index],homeContext: homeContext);
               }
           );
         }

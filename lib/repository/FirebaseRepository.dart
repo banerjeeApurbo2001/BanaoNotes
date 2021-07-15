@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:notekeeperatg/data_provider/DatabaseService.dart';
 import 'package:notekeeperatg/data_provider/FirebaseService.dart';
 import 'package:notekeeperatg/pojo_model/Note.dart';
 
@@ -15,12 +16,14 @@ class FirebaseRepository{
     List<Map> rawnotes = await service.fetchNDeleted();
     print(rawnotes);
     notes = rawnotes.map((e) => Note.fromJSON(e)).toList();
+    await DatabaseService.instance.insertNotDeleted(notes);
     return notes;
   }
 
   Future<List<Note>> fetchDeletedCollections() async {
     List<Map> rawnotes = await service.fetchDeleted();
     List<Note> notes = rawnotes.map((e) => Note.fromJSON(e)).toList();
+    await DatabaseService.instance.insertDeleted(notes);
     return notes;
   }
 
@@ -28,8 +31,8 @@ class FirebaseRepository{
     service.deleteCollection(id);
   }
 
-  Future<bool> addData(String title, String note) async {
-    Note n = Note(id: "0", title: title, description: note, deleted: false);
+  Future<bool> addData(String title, String note,String url) async {
+    Note n = Note(id: "0", title: title, description: note, deleted: false, url: url);
     bool p = await service.addData(n);
     return p;
   }
